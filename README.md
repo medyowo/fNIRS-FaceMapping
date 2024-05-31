@@ -1,4 +1,5 @@
 # fNIRS-FaceMapping
+![Used languages](https://skillicons.dev/icons?i=python,matlab)
 
 ## Description of the project
 ---

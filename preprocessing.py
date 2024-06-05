@@ -39,7 +39,8 @@ def txt2csv() -> None:
                         skiprows=33)
                     print("successfully opened file")
 
-                    #if folder doesn't exist, create it
+                    # If the folder for cleaned data doesn't exist, create it
+                    # クリーンデータのフォルダが存在しない場合、作成します
                     if not cleaned_folder.is_dir():
                         cleaned_folder.mkdir()
 

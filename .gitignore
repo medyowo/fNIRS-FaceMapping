@@ -1,2 +1,2 @@
-measurements\cleaned\*\*.csv
-.idea\*
+measurements/cleaned/*/*.csv
+.idea/*

@@ -1,6 +1,7 @@
 import pandas as pd
 import pathlib
 
+
 def txt2csv() -> None:
     """
 
@@ -14,40 +15,47 @@ def txt2csv() -> None:
         'names' : ['oceane', 'tristan'],
         'exp_type' : ['temoin', 'experience']
     }
+    cleaned_folder = []
+    subfolders = []
 
     for name in fname_options['names']:
-        for i in range(1,15):
-            if i <= 4:
-                exp_type = fname_options['exp_type'][0]
-            else :
-                exp_type = fname_options['exp_type'][1]
+        # Create cleaned directory
+        cleaned_folder = pathlib.Path(f"measurements/cleaned/{name.upper()}/")
+        to_clean_folder = pathlib.Path(f"measurements/to_clean/{name.upper()}/")
 
-            print(f"{name}_{exp_type}{i}")
+        if not cleaned_folder.is_dir():
+            cleaned_folder.mkdir()
 
-            # Typical folder name example : tristan_temoin2
-            # 典型的なフォルダ名の例: tristan_temoin2
-            folder = pathlib.Path(f"measurements/{name}_{exp_type}{i}/")
-            cleaned_folder = pathlib.Path(f"measurements/cleaned/{name}_{exp_type}{i}/")
+        for i, subfolder in enumerate(to_clean_folder.iterdir()):
+            print(f"{'-' * 50}\nCLEANING SUBFOLDER : " + str(subfolder).split("\\")[-1] + f"\n{'-' * 50}")
+            for exp in fname_options['exp_type']:
+                if exp in str(subfolder):
+                    for file in subfolder.glob('*.TXT'):
+                        try :
+                            fname = str(file)
+                            print(f"[CLEANING FILE : " + fname.split("\\")[-1] + "]")
+                            df = pd.read_csv(
+                                fname,
+                                sep="\t",
+                                skiprows=33)
+                            print("successfully opened file")
 
-            for file in folder.glob('*.TXT'):
-                try :
-                    fname = str(file)
-                    print(f"fname = {fname}")
-                    df = pd.read_csv(
-                        fname,
-                        sep="\t",
-                        skiprows=33)
-                    print("successfully opened file")
+                            # If the folder for cleaned data doesn't exist, create it
+                            # クリーンデータのフォルダが存在しない場合、作成します
+                            current_cleaned_folder = pathlib.Path(f"{str(cleaned_folder)}\\" + fname.split('\\')[-2] + "\\")
+                            if not current_cleaned_folder.is_dir():
+                                current_cleaned_folder.mkdir()
+                                print(f"CREATED FOLDER : {str(cleaned_folder)}\\" + fname.split('\\')[-2] + "\\")
 
-                    # If the folder for cleaned data doesn't exist, create it
-                    # クリーンデータのフォルダが存在しない場合、作成します
-                    if not cleaned_folder.is_dir():
-                        cleaned_folder.mkdir()
+                            df.to_csv(fname.replace(str(to_clean_folder), str(cleaned_folder)).replace("TXT","csv"))
+                            print(f"Converted {fname} successfully.\n")
 
-                    df.to_csv(fname.replace("measurements","measurements/cleaned").replace("TXT","csv"))
-                    print(f"Converted {fname} successfully.")
+                        except FileNotFoundError:
+                            print(f"File {fname} not found\n")
+                    break
+                else:
+                    print("Experience type unrecognized - SKIPPING FOLDER\n")
 
-                except FileNotFoundError:
-                    print(f"File {fname} not found")
 
-txt2csv()
+if __name__ == '__main__':
+    txt2csv()

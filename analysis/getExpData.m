@@ -21,4 +21,8 @@ function extractedData = extractExpDataFromFile(fileName)
     opts.Delimiter =',';
 
     extractedData = readtable(fileName, opts, 'ReadVariableNames', true);
+    extractedData = renamevars(extractedData,["Var1","Var2","Var3","x_1","x_2"],["index","time","task","mark","count"]);
+    
+    toDelete = extractedData.time > 60;
+    extractedData(toDelete,:) = [];
 end

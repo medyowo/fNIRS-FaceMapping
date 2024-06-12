@@ -32,6 +32,7 @@ for k=0+startValue : endValue
     end
 
     legend(toDisplay)
+    ylim([-1 1])
     hold off
 end
 

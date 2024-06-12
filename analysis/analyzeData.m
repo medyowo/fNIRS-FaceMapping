@@ -2,7 +2,7 @@ expArrays = getExpData();
 
 noise_yo = expArrays{:, 5};
 
-displayData(1, 6, expArrays)
-displayData(7, 12, expArrays)
-displayData(13, 18, expArrays)
-displayData(19, 22, expArrays)
+displayData(expArrays, 1, 6, ["oxyHb", "deoxyHb"])
+displayData(expArrays, 7, 12, ["oxyHb", "deoxyHb"])
+displayData(expArrays, 13, 18, ["oxyHb", "deoxyHb"])
+displayData(expArrays, 19, 22, ["oxyHb", "deoxyHb"])

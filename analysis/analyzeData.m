@@ -1,15 +1,8 @@
 expArrays = getExpData();
 
-test = expArrays{1};
+noise_yo = expArrays{:, 5};
 
-plot(expArrays{1}{:,2}, expArrays{1}{:,6});
-xlabel('time (seconds)');
-ylabel('Hb');
-title('channel 1')
-
-hold on
-
-plot(expArrays{1}{:,2}, expArrays{1}{:,7})
-legend("oxygenated blood", "desoxygenated blood")
-
-hold off
+displayData(1, 6, expArrays)
+displayData(7, 12, expArrays)
+displayData(13, 18, expArrays)
+displayData(19, 22, expArrays)

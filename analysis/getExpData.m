@@ -1,5 +1,6 @@
 function expArrays = getExpData()
     addpath("../fNIRS-FaceMapping/")
+    warning('OFF', 'MATLAB:table:ModifiedAndSavedVarnames')
     
     myFolder = 'measurements/cleaned';
     filePattern = fullfile(myFolder, '**/*.csv');
@@ -15,6 +16,7 @@ function extractedArrays = filesToArray(filesList)
 end
 
 function extractedData = extractExpDataFromFile(fileName)
+    disp("[Extracting] " + fileName)
     opts=detectImportOptions(fileName, 'NumHeaderLines',2);
     opts.VariableNamesLine = 1;
     opts.VariableUnitsLine = 2;
@@ -25,4 +27,5 @@ function extractedData = extractExpDataFromFile(fileName)
     
     toDelete = extractedData.time > 60;
     extractedData(toDelete,:) = [];
+    disp("[Job complete]")
 end

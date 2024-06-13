@@ -14,5 +14,23 @@ Shimadzuソフトウェアは、データをプレーンテキストファイル
 
 ---
 
+## About Data
+
+Notice that data are in folded like this : 
+```
+measurements\to_clean\{CONTROL SUBJECT NAME}\[_temoin{number}|experience{number}]\DATA:
+```
+
+We collected data from Shimadzu LIGHTNIRS and named them as following :
+> Control Experiments \
+_temoin1 : Resting, Closed Eyes, Head still, No chewing gum \
+_temoin2 (UNUSED) : Resting, Closed Eyes, Head still, Chewing gum \
+_temoin3 : Resting, Opened Eyes, Head still, No chewing gum \
+_temoin4 (UNUSED) : Resting, Opened Eyes, Head still, Chewing gum
+
+> Test Experiments \
+experience5 : 
+
+
 ## Requirements
 

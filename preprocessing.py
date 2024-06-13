@@ -24,7 +24,8 @@ def txt2csv() -> None:
         # Create cleaned directory is it doesn't exist
         # クリーンなディレクトリが存在しない場合は作成します
         if not cleaned_folder.is_dir():
-            if not pathlib.Path(f"measurements/cleaned/").is_dir : pathlib.Path(f"measurements/cleaned/").mkdir()
+            if not pathlib.Path(f"measurements/cleaned").is_dir():
+                pathlib.Path(f"measurements/cleaned").mkdir()
             cleaned_folder.mkdir()
 
         # Check each subfolder of the data directory to get data

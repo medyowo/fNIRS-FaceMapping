@@ -14,5 +14,31 @@ Shimadzuソフトウェアは、データをプレーンテキストファイル
 
 ---
 
+## About Data
+
+Notice that data are in folded like this : 
+```measurements\to_clean\{CONTROL SUBJECT NAME}\[_temoin{number}|experience{number}]\DATA:```
+
+We collected data from Shimadzu LIGHTNIRS and named them as following :
+> Control Experiments \
+```[CONTROL]``` **\_temoin1 :** Resting, Closed Eyes, Head still, No chewing gum \
+```[CONTROL]``` **\_temoin2 :** Resting, Closed Eyes, Head still, Chewing gum  _(UNUSED)_ \
+```[CONTROL]``` **\_temoin3 :** Resting, Opened Eyes, Head still, No chewing gum \
+```[CONTROL]``` **\_temoin4 :** Resting, Opened Eyes, Head still, Chewing gum _(UNUSED)_
+
+> Test Experiments \
+```[ALL]``` **experience5**: Moving all face muscles _(UNUSED)_\
+```[EYEBROWS]``` **experience6 :** Raised Eyebrows \
+```[EYEBROWS]``` **experience7 :** Frowned Eyebrows \
+```[NOSE]``` **experience8 :** Moving Nostrils \
+```[NOSE]``` **experience9 :** Frowned Nose \
+```[MOUTH]``` **experience10 :** Smile (No teeth) \
+```[MOUTH]``` **experience11 :** Frown \
+```[MOUTH]``` **experience12 :** Opened Mouth (Surprised) \
+```[MOUTH]``` **experience13 :** Puckered Mouth \
+```[TONGUE]``` **experience14 :** Moving Tongue
+
+For each experiment we made 5 tries for 1 minute each.
+
 ## Requirements
 

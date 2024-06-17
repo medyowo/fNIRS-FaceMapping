@@ -29,6 +29,9 @@ function displayData(data, startData, EndData, startChannel, endChannel, toDispl
             end
         
             if ismember("totalHb", toDisplay)
+                if ismember("Fourier", toDisplay)
+                    plot(data(j){:,2}, data(j){:,8+3*(k-1)}, "Color", "#77AC30")
+                end
                 plot(data{j}{:,2}, data{j}{:,8+3*(k-1)}, "Color", "#77AC30")
             end
         

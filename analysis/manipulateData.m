@@ -1,31 +1,31 @@
 function filter = manipulateData()
-    % Load data
-    data = getExpData();
     % Sampling frequency fe = 13.33 Hz
     % Number of samples N = 800 *minimum*
-    % Cutoff lowpass filter (in Hz)
-    cutoff = calculateCutOff();
-    % Fréquence de coupure du filtre passe-bas
+    
+    % Load data
+    data = getExpData();
 
+    % Calculate Fourier Transform to determine cutoff frequency
+    ft = calculateFT();
+
+    % Cutoff lowpass filter (in Hz)
+    filter = 1;
 end
 
 % Calculates Fourier transform of each chanel to determine cutoff
-function cutoff = calculateCutOff()
+function ftx = calculateFT()
     data = getExpData();
 
-    % Adds first element of the total oxy/deoxy blood from chanel 1
-    x = [data{1}{:,8}];
-    ftx = [abs(fft(x(1)))];
+    % Initialise array to store Fourier transform
+    ftx = [];
 
     % Get data from each case measurements
-    for i = 2:14
+    for i = 1:length(data)
         % Get data from total oxy/deoxy blood chanels
-        for j = 11:3:71
-            x = [x; data{i}{:,j}];
-            ftx = [ftx; abs(fft(x(i)))];
+        for j = 8:3:71
+            x = data{i}{:,j};
+            ft = abs(fft(x)); % Fourier transform applied to data
+            ftx = [ftx; ft];
         end
     end
-    % Calculate Fourier transform on each chanel to determine noise
-    cutoff = 1;
-    % Visualise each Fourier transform
 end

@@ -17,14 +17,15 @@ end
 
 function extractedData = extractExpDataFromFile(fileName)
     disp("[Extracting] " + fileName)
-    opts=detectImportOptions(fileName, 'NumHeaderLines',2);
+    opts=detectImportOptions(fileName, 'NumHeaderLines',3);
     opts.VariableNamesLine = 1;
     opts.VariableUnitsLine = 2;
     opts.Delimiter =',';
 
     extractedData = readtable(fileName, opts, 'ReadVariableNames', true);
     extractedData = renamevars(extractedData,["Var1","Var2","Var3","x_1","x_2"],["index","time","task","mark","count"]);
-    
+    extractedData{:, "index"} = extractedData{:, "index"} - 1;
+
     toDelete = extractedData.time > 60;
     extractedData(toDelete,:) = [];
     disp("[Job complete]")

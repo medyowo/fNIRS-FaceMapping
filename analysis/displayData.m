@@ -3,11 +3,11 @@
 % startValue : first channel to display
 % endValue : last channel to display
 % toDisplay : What value to display between [oxyHb, deoxyHb, totHb]
-function displayData(data, startData, EndData, startChannel, endChannel, toDisplay)
+function displayData(data, startData, EndData, startChannel, endChannel, toDisplay, graphTitle)
     %for each data
     for j=0+startData : EndData
         % Create figure for subplot channels
-        figure('Name',['DATA N°', num2str(j),' - Visualisation of channels ', num2str(startChannel), ' - ', num2str(endChannel)], 'Numbertitle','off');
+        figure('Name',[graphTitle,' | ', 'DATA N°', num2str(j),' - Visualisation of channels ', num2str(startChannel), ' - ', num2str(endChannel)], 'Numbertitle','off');
         
         % For each channel display values
         for k=0+startChannel : endChannel
@@ -29,14 +29,18 @@ function displayData(data, startData, EndData, startChannel, endChannel, toDispl
             end
         
             if ismember("totalHb", toDisplay)
-                if ismember("Fourier", toDisplay)
-                    plot(data(j){:,2}, data(j){:,8+3*(k-1)}, "Color", "#77AC30")
-                end
                 plot(data{j}{:,2}, data{j}{:,8+3*(k-1)}, "Color", "#77AC30")
+            end
+            ylim([-1 1]);
+
+            if ismember("ft", toDisplay)
+                plot(data{j}{:,1}, data{j}{:,k+1}, "Color", "#7E2F8E")
+                xlabel('frequency (Hz)');
+                ylabel('Hb');
+                ylim([min(data{j}{:,k+1}), max(data{j}{:,k+1})]);
             end
         
             legend(toDisplay)
-            ylim([-1 1])
             hold off
         end
     end

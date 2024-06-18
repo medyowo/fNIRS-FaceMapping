@@ -1,11 +1,12 @@
-expArrays = getExpData();
-ftx = manipulateData();
+clearvars, clc, close all;
 
-noise_yo = expArrays{:, 5};
+expArrays = getExpData();    
+[ftx, filter, filtered_data] = manipulateData(expArrays);
 
-displayData(expArrays, 1, 2, 1, 6, ["oxyHb", "deoxyHb"])
-displayData(expArrays, 1, 1, 7, 12, ["oxyHb", "deoxyHb"])
-displayData(expArrays, 1, 1, 13, 18, ["oxyHb", "deoxyHb"])
-displayData(expArrays, 1, 1, 19, 22, ["oxyHb", "deoxyHb", "totalHb"])
+% before filtering
+displayData(expArrays, 1, 1, 13, 18, ["oxyHb", "deoxyHb"], 'Collected Data')
+displayData(expArrays, 1, 1, 19, 22, ["oxyHb", "deoxyHb"], 'Collected Data')
 
-displayData(ftx,1,1,1,6,["totalHb","Fourier"])
+% after filtering
+displayData(filtered_data, 1, 1, 13, 18, ["oxyHb", "deoxyHb"], 'Filtered Data')
+displayData(filtered_data, 1, 1, 19, 22, ["oxyHb", "deoxyHb"], 'Filtered Data')

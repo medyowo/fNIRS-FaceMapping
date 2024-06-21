@@ -1,3 +1,5 @@
+% manipulateData is used to calculate Fourier Transform and filter
+% collected data
 function [ftx, filter, filtered_data] = manipulateData(data)
     % Sampling frequency fe = 13.33 Hz
     % Number of samples N = 800 *minimum*
@@ -13,9 +15,12 @@ function [ftx, filter, filtered_data] = manipulateData(data)
     filtered_data = filteringData(data, filter);
 end
 
+% This function filter data using pass-low filter
 function filtered_data = filteringData(data, calcfilter)
     for i = 1 : length(data)
+        % filter all channels
         for j = 1 : 22
+            % filter deoxy, oxy and total blood
             data{i}{:,6+3*(j-1)} = filtfilt(calcfilter(1, :), calcfilter(2, :), data{i}{:,6+3*(j-1)});
             data{i}{:,7+3*(j-1)} = filtfilt(calcfilter(1, :), calcfilter(2, :), data{i}{:,7+3*(j-1)});
             data{i}{:,8+3*(j-1)} = filtfilt(calcfilter(1, :), calcfilter(2, :), data{i}{:,8+3*(j-1)});
@@ -44,13 +49,19 @@ function ftx = calculateFT(data, analysis_on)
         Te = data{i}{1, 2};
         Fe = 1/Te;
         Ps = height(data{i});
-
+        
+        % Change variable names
         allVars = 1:23;
         newNames = append("ch",string(allVars));
         newNames = replace(newNames, "ch23", "frequency");
+        
+        % Change variable types
         types = strings(1, 23);
         types = append("double", types);
+
+        % Create the new table for Fourier Transform data
         ftx{i} = table('Size', [length(data{i}{:,8}) 23], 'VariableTypes', types, 'VariableNames',newNames);
+        
         % Get data from total oxy/deoxy blood chanels
         for j = 1 : 22
             ft = fftshift(abs(fft(data{i}{:,8 + (j - 1) * 3}))); % Fourier transform applied to data

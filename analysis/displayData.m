@@ -20,19 +20,23 @@ function displayData(data, startData, EndData, startChannel, endChannel, toDispl
             hold on
             
             % Check each data which is needed to be displayed
+            % Display oxygenated blood graph
             if ismember("oxyHb", toDisplay)
                 plot(data{j}{:,2}, data{j}{:,6+3*(k-1)}, "Color", "#A2142F");
             end
-        
+            
+            % Display desoxygenated blood graph
             if ismember("deoxyHb", toDisplay)
                 plot(data{j}{:,2}, data{j}{:,7+3*(k-1)}, "Color", "#0072BD")
             end
-        
+            
+            % Display total blood graph
             if ismember("totalHb", toDisplay)
                 plot(data{j}{:,2}, data{j}{:,8+3*(k-1)}, "Color", "#77AC30")
             end
             ylim([-1 1]);
-
+            
+            % Display Fourier Transform grpah
             if ismember("ft", toDisplay)
                 plot(data{j}{:,1}, data{j}{:,k+1}, "Color", "#7E2F8E")
                 xlabel('frequency (Hz)');

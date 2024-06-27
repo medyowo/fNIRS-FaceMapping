@@ -42,7 +42,7 @@ end
 % Calculates Fourier transform of each chanel to determine cutoff
 function ftx = calculateFT(data, analysis_on)
     % Initialise array to store Fourier transform
-    ftx = {[1,length(data)]};
+    ftx = {1,length(data)};
 
     % Get data from each case measurements
     for i = 1:length(data)

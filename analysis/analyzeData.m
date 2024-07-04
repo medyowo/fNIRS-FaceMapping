@@ -1,11 +1,37 @@
-expArrays = getExpData();
-ftx = manipulateData();
+clearvars, clc, close all;
 
-noise_yo = expArrays{:, 5};
+% call function to get experimental data
+expArrays = getExpData('measurements/cleaned');
 
-displayData(expArrays, 1, 2, 1, 6, ["oxyHb", "deoxyHb"])
-displayData(expArrays, 1, 1, 7, 12, ["oxyHb", "deoxyHb"])
-displayData(expArrays, 1, 1, 13, 18, ["oxyHb", "deoxyHb"])
-displayData(expArrays, 1, 1, 19, 22, ["oxyHb", "deoxyHb", "totalHb"])
+% call function to filter data
+[ftx, filter, filtered_data] = manipulateData(expArrays);
 
-displayData(ftx,1,1,1,6,["totalHb","Fourier"])
+% before filtering
+displayData(expArrays, 1, 1, 13, 18, ["oxyHb", "deoxyHb"], 'Collected Data')
+displayData(expArrays, 1, 1, 19, 22, ["oxyHb", "deoxyHb"], 'Collected Data')
+
+% after filtering
+displayData(filtered_data, 1, 1, 13, 18, ["oxyHb", "deoxyHb"], 'Filtered Data')
+displayData(filtered_data, 1, 1, 19, 22, ["oxyHb", "deoxyHb"], 'Filtered Data')
+
+% Amplify data
+amp_data = amplifyData(filtered_data, ["jittering", "scaling", "warping"], 10);
+
+% after amplifying
+displayData(amp_data, 141, 142, 13, 18, ["oxyHb", "deoxyHb"], 'Amplified Data')
+displayData(amp_data, 141, 142, 19, 22, ["oxyHb", "deoxyHb"], 'Amplified Data')
+
+% save filtered data
+SaveCurrentData(amp_data, "measurements\filtered\");
+
+% This function save selected data to designated folder
+function hasSuccessed = SaveCurrentData(toSaveData, folderName)
+    disp("[Saving] filtered data in " + folderName)
+    if saveData(toSaveData, folderName)
+        disp("[Saving complete]")
+        hasSuccessed = true;
+    else
+        disp("[Error] Could not save filtered Data")
+        hasSuccessed = false;
+    end
+end

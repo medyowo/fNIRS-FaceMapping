@@ -2,6 +2,7 @@ import pandas as pd
 import pathlib
 import random
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import cross_val_score
 
 # The prints in the comments allow debugging in case of problems
 # コメント内のプリントは問題が発生した場合のデバッグに役立ちます
@@ -22,6 +23,7 @@ def sep_train_data() -> list:
     """
 
     Separate the cleaned dataset into train and test datasets (7:3 ratio)
+    Associate data with their respective label
     クリーンアップされたデータセットをトレインデータセットとテストデータセットに分割する（7:3の比率）
 
     """
@@ -35,7 +37,6 @@ def sep_train_data() -> list:
     base_path = pathlib.Path('measurements/cleaned')
     train_data = []
     test_data = []
-
     for name in fname_options['names']:
         # print(f"{name.upper()} SELECTED")
 
@@ -70,13 +71,40 @@ def sep_train_data() -> list:
 
                         # The remaining 30% are added to test_data
                         # 残りの30%はテストデータに追加される
-                        remaining_files = set(files) - set(selected_files)
+                        remaining_files = list(set(files) - set(selected_files))
                         # print(f"REMAINING FILES : {remaining_files}")
                         test_data.append(remaining_files)
-
+    
     # print(f"TRAIN DATA : {train_data}")
     # print(f"TEST DATA : {test_data}")
     return train_data, test_data
+
+def label_data(train_data, test_data) -> dict:
+    """
+    
+    Label each file
+    
+    """
+    # Create label options list
+    label_temp = [('no_movement', 2), ('jaw', 2),('face', 1), ('eyebrows', 2), ('nose', 2), ('mouth', 4), ('tongue', 1)]
+    label_options = [element for element, count in label_temp for _ in range(count)]
+    print(f"LABEL OPTIONS : {label_options}")
+
+    # Label each file
+    train_set = {}
+    test_set = {}
+
+    for i in range(len(label_options)):
+        try:
+            train_set[label_options[i]] += train_data[i]
+            test_set[label_options[i]] += test_data[i]
+        except KeyError:
+            train_set[label_options[i]] = train_data[i]
+            test_set[label_options[i]] = test_data[i]
+
+    print(f"TRAIN SET : {train_set}")
+    print(f"TEST SET : {test_set}")
+    return train_set,test_set
 
 def data_transform(file) -> list:
     """
@@ -85,24 +113,29 @@ def data_transform(file) -> list:
     データを正規化してデータの活用を容易にする
     
     """
+
     # Normalisation (Scaling Normalisation): modifies dataset to fit on a scale between [0;1]
     scaler = MinMaxScaler()
     scaler = scaler.fit_transform(file)
-    print(f"DATA NORMALISED : {scaler}")
+    # print(f"DATA NORMALISED : {scaler}")
+    return scaler
 
-train_data, test_data = sep_train_data()
+if __name__ == '__main__':
+    train_data, test_data = sep_train_data()
+    print(f"TRAIN DATA : {train_data}")
+    label_data(train_data, test_data)
 
-# Read train data
-for file in train_data:
-    for i in range(len(file)):
+    # Read train data
+    for file in train_data:
+        for i in range(len(file)):
 
-        # Open CSV file from train data
-        df = pd.read_csv(pathlib.Path(file[i]))
-        print(f"FILE READ : {pathlib.Path(file[i])}")
+            # Open CSV file from train data
+            df = pd.read_csv(pathlib.Path(file[i]))
+            # print(f"FILE READ : {pathlib.Path(file[i])}")
 
-        # Drop irrelevant data
-        df = df.iloc[2:]
-        df.drop(df.columns[0], axis=1)
+            # Drop irrelevant data
+            df = df.iloc[2:]
+            df.drop(df.columns[0], axis=1)
 
-        print(f"HEAD : {df.head()}")
-        data_transform(df)
+            # print(f"HEAD : {df.head()}")
+            scaler = data_transform(df)

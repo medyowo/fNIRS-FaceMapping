@@ -24,11 +24,11 @@ function additionalData = amplifyData(originalData, methods, nFactorData)
             end
 
             if ismember("scaling", method)
-                additionalData{i + ((k-1)* 140)} = addscaledData(originalData{i}, additionalData{i + ((k-1)* 140)}, [0.95, 1.05]);
+                additionalData{i + ((k-1)* 140)} = addscaledData(originalData{i}, additionalData{i + ((k-1)* 140)}, [0.90, 1.10]);
             end
 
             if ismember("warping", method)
-                additionalData{i + ((k-1)* 140)} = addwarpedData(originalData{i}, additionalData{i + ((k-1)* 140)}, 0.05, originalData{i}{:, 2});
+                additionalData{i + ((k-1)* 140)} = addwarpedData(originalData{i}, additionalData{i + ((k-1)* 140)}, 0.10, originalData{i}{:, 2});
             end
 
             additionalData{i + ((k-1)* 140)}{:, 1} = originalData{i}{:, 1};

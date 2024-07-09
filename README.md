@@ -40,5 +40,12 @@ We collected data from Shimadzu LIGHTNIRS and named them as following :
 
 For each experiment we made 5 tries for 1 minute each.
 
-## Requirements
+## Python Requirements
+
+- pandas (2.2.2)
+- pathlib (1.0.1)
+- scikit-learn (1.5.1)
+
+> To install all requirements at once just use :
+```pip install -r requirements.txt```
 

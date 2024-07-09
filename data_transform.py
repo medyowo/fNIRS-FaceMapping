@@ -1,8 +1,11 @@
 import pandas as pd
+import numpy as np
 import pathlib
 import random
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import SGDClassifier
+
 
 # The prints in the comments allow debugging in case of problems
 # コメント内のプリントは問題が発生した場合のデバッグに役立ちます
@@ -34,7 +37,7 @@ def sep_train_data() -> list:
         'exp_type': ['temoin', 'experience']
     }
 
-    base_path = pathlib.Path('measurements/cleaned')
+    base_path = pathlib.Path('measurements/filtered')
     train_data = []
     test_data = []
     for name in fname_options['names']:
@@ -120,10 +123,30 @@ def data_transform(file) -> list:
     # print(f"DATA NORMALISED : {scaler}")
     return scaler
 
+def label_list(dataset):
+    # Get label from datasets
+    for val in dataset.values():
+        
+
+def learn_data(train_data, train_label):
+    """
+    
+    Use of the Stochastic Gradient Descent (SGD) Classifier to learn the train dataset
+    
+    """
+    classifier = SGDClassifier()
+    print("PREDICTING...")
+    classifier.fit(train_data, train_label)
+    print(f"PREDICT : {classifier.predict(train_data)[0]}")
+    print(f"Scores de décision : {classifier.decision_function(train_data)[0]}\n")
+    print(f"Position du plus haut score : {np.argmax(classifier.decision_function(train_data)[0])}")
+
+
 if __name__ == '__main__':
     train_data, test_data = sep_train_data()
     print(f"TRAIN DATA : {train_data}")
-    label_data(train_data, test_data)
+    train_set, test_set = label_data(train_data, test_data)
+        
 
     # Read train data
     for file in train_data:

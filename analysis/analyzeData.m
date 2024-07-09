@@ -15,7 +15,7 @@ displayData(filtered_data, 1, 1, 13, 18, ["oxyHb", "deoxyHb"], 'Filtered Data')
 displayData(filtered_data, 1, 1, 19, 22, ["oxyHb", "deoxyHb"], 'Filtered Data')
 
 % Amplify data
-amp_data = amplifyData(filtered_data, ["jittering", "scaling", "warping"], 10);
+amp_data = amplifyData(filtered_data, ["jittering", "scaling", "warping"], 3);
 
 % after amplifying
 displayData(amp_data, 141, 142, 13, 18, ["oxyHb", "deoxyHb"], 'Amplified Data')

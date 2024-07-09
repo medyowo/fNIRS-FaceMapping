@@ -20,7 +20,7 @@ Notice that data are in folded like this :
 ```measurements\to_clean\{CONTROL SUBJECT NAME}\[_temoin{number}|experience{number}]\DATA:```
 
 We collected data from Shimadzu LIGHTNIRS and named them as following :
-### Control Experiments \
+### Control Experiments
 1. ```[CONTROL]``` **\_temoin1 :** Resting, Closed Eyes, Head still, No chewing gum 
 2. ```[CONTROL]``` **\_temoin2 :** Resting, Closed Eyes, Head still, Chewing gum  _(UNUSED)_ 
 3. ```[CONTROL]``` **\_temoin3 :** Resting, Opened Eyes, Head still, No chewing gum 

@@ -1,7 +1,10 @@
+% This function use 3 different methods to amplify the data amount to be
+% usable as an AI training database.
 function additionalData = amplifyData(originalData, methods, nFactorData)
     additionalData = {[1,length(nFactorData * length(originalData))]};
     
     for k=1 : (nFactorData-1)
+        % Select a random method between the ones chosen by user
         method = randsample(methods,1);
         disp("[ADD] Amplify data using " + method + " (" + k + ")")
         
@@ -19,6 +22,7 @@ function additionalData = amplifyData(originalData, methods, nFactorData)
             additionalData{i + ((k-1)* 140)}.Properties.CustomProperties.FileName = strrep(originalData{i}.Properties.CustomProperties.FileName, "_" + originalData{i}.Properties.CustomProperties.TestNumber, "_" + (str2double(originalData{i}.Properties.CustomProperties.TestNumber) + k*5));
             additionalData{i + ((k-1)* 140)}.Properties.CustomProperties.SourceFolder = originalData{i}.Properties.CustomProperties.SourceFolder;
 
+            % Select the method from random result
             if ismember("jittering", method)
                 additionalData{i + ((k-1)* 140)} = addjitteredData(originalData{i}, additionalData{i + ((k-1)* 140)}, 0.01);
             end
@@ -39,9 +43,12 @@ function additionalData = amplifyData(originalData, methods, nFactorData)
     additionalData = [originalData, additionalData];
 end
 
+% Create new data using jittering method
 function jitteredData = addjitteredData(currentData, currentAdditionalData, jitter_amount)
+    % Randomize noise
     noise = jitter_amount * randn(size(currentData{:,6}));
     
+    % Apply noise to current data
     for j = 1 : 22
         currentAdditionalData{:,6+3*(j-1)} = currentData{:,6+3*(j-1)} + noise;
         currentAdditionalData{:,7+3*(j-1)} = currentData{:,7+3*(j-1)} + noise;
@@ -51,9 +58,12 @@ function jitteredData = addjitteredData(currentData, currentAdditionalData, jitt
     jitteredData = currentAdditionalData;
 end
 
+% Create new data using scaling method
 function scaledData = addscaledData(currentData, currentAdditionalData, scaling_factor_range)
+    % Calculate random scaling factor
     scaling_factor = (scaling_factor_range(2) - scaling_factor_range(1)) * rand + scaling_factor_range(1);
-
+    
+    % Apply scaling on current data
     for j = 1 : 22
         currentAdditionalData{:,6+3*(j-1)} = currentData{:,6+3*(j-1)} * scaling_factor;
         currentAdditionalData{:,7+3*(j-1)} = currentData{:,7+3*(j-1)} * scaling_factor;
@@ -63,10 +73,15 @@ function scaledData = addscaledData(currentData, currentAdditionalData, scaling_
     scaledData = currentAdditionalData;
 end
 
+% Create new data using warping method
 function warpedData = addwarpedData(currentData, currentAdditionalData, warping_amount, time)
+    % Generate warping function depending on user amount
     warp_function = @(x) x + warping_amount * sin(2 * pi * x / max(x));
-    random_warp = warp_function(time + warping_amount * randn(size(time)));
 
+    % Use warp function to generate random warping
+    random_warp = warp_function(time + warping_amount * randn(size(time)));
+    
+    % Apply warping on current data
     for j = 1 : 22
         currentAdditionalData{:,6+3*(j-1)} = interp1(time, currentData{:,6+3*(j-1)}, random_warp, 'linear', 'extrap');
         currentAdditionalData{:,7+3*(j-1)} = interp1(time, currentData{:,7+3*(j-1)}, random_warp, 'linear', 'extrap');

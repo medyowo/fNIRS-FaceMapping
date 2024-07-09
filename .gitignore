@@ -1,3 +1,4 @@
 measurements/cleaned/*/*
+measurements/filtered/*/*
 .idea/*
 *.asv

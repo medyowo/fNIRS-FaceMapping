@@ -38,6 +38,8 @@ def sep_train_data() -> list:
     }
 
     base_path = pathlib.Path('measurements/filtered')
+    # base_path = pathlib.Path('measurements/cleaned')
+
     train_data = []
     test_data = []
     for name in fname_options['names']:
@@ -50,7 +52,7 @@ def sep_train_data() -> list:
                 else :
                     prefix = fname_options['exp_type'][1]
 
-                
+                cnt_tmp +=1
                 folder_name = f"{prefix}{i}"
                 #print(f"FOLDER NAME : {folder_name}")
                 subfolder = base_path / name.upper() / folder_name
@@ -77,6 +79,7 @@ def sep_train_data() -> list:
                         remaining_files = list(set(files) - set(selected_files))
                         # print(f"REMAINING FILES : {remaining_files}")
                         test_data.append(remaining_files)
+                        
     
     # print(f"TRAIN DATA : {train_data}")
     # print(f"TEST DATA : {test_data}")
@@ -91,7 +94,7 @@ def label_data(train_data, test_data) -> dict:
     # Create label options list
     label_temp = [('no_movement', 2), ('jaw', 2),('face', 1), ('eyebrows', 2), ('nose', 2), ('mouth', 4), ('tongue', 1)]
     label_options = [element for element, count in label_temp for _ in range(count)]
-    print(f"LABEL OPTIONS : {label_options}")
+    # print(f"LABEL OPTIONS : {label_options}")
 
     # Label each file
     train_set = {}
@@ -105,11 +108,11 @@ def label_data(train_data, test_data) -> dict:
             train_set[label_options[i]] = train_data[i]
             test_set[label_options[i]] = test_data[i]
 
-    print(f"TRAIN SET : {train_set}")
-    print(f"TEST SET : {test_set}")
+    # print(f"TRAIN SET : {train_set}")
+    # print(f"TEST SET : {test_set}")
     return train_set,test_set
 
-def data_transform(file) -> list:
+def normalise(file) -> list:
     """
 
     Normalize the data for easier data exploitation
@@ -123,10 +126,21 @@ def data_transform(file) -> list:
     # print(f"DATA NORMALISED : {scaler}")
     return scaler
 
-def label_list(dataset):
-    # Get label from datasets
-    for val in dataset.values():
+def label_list(dataset) -> list:
+    """
+
+    Separates the labels of the dataset into a different list
+    
+    """
+    label_lst = []
+    
+    # Iterate over the items in the dataset
+    for label, data_list in dataset.items():
+
+        # Append the label for each item in the data list
+        label_lst.extend([label] * len(data_list))
         
+    return label_lst
 
 def learn_data(train_data, train_label):
     """
@@ -137,28 +151,44 @@ def learn_data(train_data, train_label):
     classifier = SGDClassifier()
     print("PREDICTING...")
     classifier.fit(train_data, train_label)
-    print(f"PREDICT : {classifier.predict(train_data)[0]}")
-    print(f"Scores de décision : {classifier.decision_function(train_data)[0]}\n")
-    print(f"Position du plus haut score : {np.argmax(classifier.decision_function(train_data)[0])}")
+    # print(f"PREDICT : {classifier.predict(train_data)[0]}")
+    # print(f"Scores de décision : {classifier.decision_function(train_data)[0]}\n")
+    # print(f"Position du plus haut score : {np.argmax(classifier.decision_function(train_data)[0])}")
 
 
 if __name__ == '__main__':
-    train_data, test_data = sep_train_data()
+    tmp_train_data, tmp_test_data = sep_train_data()
+    print(f"TMP TRAIN DATA : {tmp_train_data}")
+    train_set, test_set = label_data(tmp_train_data, tmp_test_data)
+    
+    # Create separate corresponding labels
+    train_label = label_list(train_set)
+    test_label = label_list(test_set)
+    print(f"TRAIN LABEL : {train_label}")
+
+    # Create separate corresponding data
+    train_data = list(train_set.values())
+    test_data = list(test_set.values())
     print(f"TRAIN DATA : {train_data}")
-    train_set, test_set = label_data(train_data, test_data)
-        
 
     # Read train data
-    for file in train_data:
+    for file in tmp_train_data:
         for i in range(len(file)):
 
             # Open CSV file from train data
             df = pd.read_csv(pathlib.Path(file[i]))
+
             # print(f"FILE READ : {pathlib.Path(file[i])}")
 
             # Drop irrelevant data
             df = df.iloc[2:]
             df.drop(df.columns[0], axis=1)
+            # print(f"HEAD : {df.head(5)}")
 
-            # print(f"HEAD : {df.head()}")
-            scaler = data_transform(df)
+            # Normalise 
+            scaler = normalise(df)
+            # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
+
+        # Learn data
+        # learn_data(train_data, train_label)
+

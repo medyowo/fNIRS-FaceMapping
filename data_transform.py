@@ -5,7 +5,8 @@ import random
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import cross_val_score
 from sklearn import tree
-
+from ai_processing import ai_2d
+from ai_processing import ai_3d
 
 # The prints in the comments allow debugging in case of problems
 # コメント内のプリントは問題が発生した場合のデバッグに役立ちます
@@ -152,18 +153,18 @@ def label_list(dataset) -> list:
         
     return label_lst
 
-def learn_data(train_data, train_label):
-    """
-    
-    Use of the Stochastic Gradient Descent (SGD) Classifier to learn the train dataset
-    
-    """
-    classifier = tree.DecisionTreeClassifier()
-    print("PREDICTING...")
-    classifier.fit(train_data, train_label)
-    # print(f"PREDICT : {classifier.predict(train_data)[0]}")
-    # print(f"Scores de décision : {classifier.decision_function(train_data)[0]}\n")
-    # print(f"Position du plus haut score : {np.argmax(classifier.decision_function(train_data)[0])}")
+# def learn_data(train_data, train_label):
+#     """
+#
+#     Use of the Stochastic Gradient Descent (SGD) Classifier to learn the train dataset
+#
+#     """
+#     classifier = tree.DecisionTreeClassifier()
+#     print("PREDICTING...")
+#     classifier.fit(train_data, train_label)
+#     # print(f"PREDICT : {classifier.predict(train_data)[0]}")
+#     # print(f"Scores de décision : {classifier.decision_function(train_data)[0]}\n")
+#     # print(f"Position du plus haut score : {np.argmax(classifier.decision_function(train_data)[0])}")
 
 
 def pretreat_data():
@@ -210,8 +211,6 @@ def pretreat_data():
 
     print(f"TRAIN DATA ==============\n {train_data[0]}")
 
-    # Learn data
-    learn_data(train_data, train_label)
 
 if __name__ == '__main__':
     pretreat_data()

@@ -54,7 +54,7 @@ function extractedData = extractExpDataFromFile(fileName)
     % Add multiple properties to precise data 
     extractedData = addprop(extractedData,{'SubjectName', 'ExperimentType', 'ExperimentNumber', 'TestNumber', 'FileName', 'SourceFolder'}, {'table', 'table', 'table', 'table', 'table', 'table'});
     extractedData.Properties.CustomProperties.SubjectName = fileInfo(1);
-    extractedData.Properties.CustomProperties.ExperimentType = regexprep(fileInfo(2), '[0-9_]', '');
+    extractedData.Properties.CustomProperties.ExperimentType = regexprep(fileInfo(2), '[0-9]', '');
     
     numbers = split(regexprep(fileInfo(end), '[a-zA-Z.]+', ''), "_");
     extractedData.Properties.CustomProperties.ExperimentNumber = regexprep(fileInfo(2), '[a-zA-Z_]+', '');

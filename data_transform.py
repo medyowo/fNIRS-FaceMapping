@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import pathlib
 import random
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.model_selection import cross_val_score
 from sklearn import tree
 from ai_processing import ai_2d
@@ -58,7 +58,6 @@ def sep_train_data() -> list:
             # print(f"SUBFOLDER : {subfolder}")
 
             if subfolder.is_dir():
-                print(folder_name)
                 # print("SUBFOLDER IS DIR")
 
                 # Find every file in the folder
@@ -79,18 +78,13 @@ def sep_train_data() -> list:
                     remaining_files = list(set(files) - set(selected_files))
                     # print(f"REMAINING FILES : {remaining_files}")
                     test_data.append(remaining_files)
-                        
-    
-    print(f"TRAIN DATA : {train_data}")
+
     counter = 0
     for train_file in train_data:
-      print(train_file[0]," : ",len(train_file))
       counter += len(train_file)
 
-    print("Counter : ", counter)
-
-    print(f"TEST DATA : {test_data}")
     return train_data, test_data
+
 
 def label_data(train_data, test_data) -> dict:
     """
@@ -166,15 +160,16 @@ def label_list(dataset) -> list:
 #     # print(f"Scores de décision : {classifier.decision_function(train_data)[0]}\n")
 #     # print(f"Position du plus haut score : {np.argmax(classifier.decision_function(train_data)[0])}")
 
+def labels_to_num(labels):
+    label_encoder = LabelEncoder()
+    return label_encoder.fit_transform(labels)
 
 def pretreat_data():
     tmp_train_data, tmp_test_data = sep_train_data()
-    print(f"TMP TRAIN DATA : {tmp_train_data}")
 
     count = 0
     for tmp_train_list in tmp_train_data:
         count += len(tmp_train_list)
-        print(tmp_train_list[0], len(tmp_train_list))
 
     print("TOTAL COUNT TMP TRAIN : ", count)
 
@@ -184,6 +179,11 @@ def pretreat_data():
     train_label = label_list(train_set)
     test_label = label_list(test_set)
     print(f"TRAIN LABEL : {train_label}")
+
+    # Encode labels to numeric values
+    train_labels = labels_to_num(train_label)
+    test_labels = labels_to_num(test_label)
+    print(f"TRAIN LABEL : {train_labels}")
 
     # Create separate corresponding data
     train_list_data = list(train_set.values())
@@ -209,7 +209,7 @@ def pretreat_data():
             # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
             train_data.append(df)
 
-    print(f"TRAIN DATA ==============\n {train_data[0]}")
+
 
 
 if __name__ == '__main__':

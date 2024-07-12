@@ -15,11 +15,11 @@ displayData(filtered_data, 1, 1, 13, 18, ["oxyHb", "deoxyHb"], 'Filtered Data')
 displayData(filtered_data, 1, 1, 19, 22, ["oxyHb", "deoxyHb"], 'Filtered Data')
 
 % Amplify data
-amp_data = amplifyData(filtered_data, ["jittering", "scaling", "warping"], 3);
+amp_data = amplifyData(filtered_data, ["warping"], 2);
 
 % after amplifying
-displayData(amp_data, 141, 142, 13, 18, ["oxyHb", "deoxyHb"], 'Amplified Data')
-displayData(amp_data, 141, 142, 19, 22, ["oxyHb", "deoxyHb"], 'Amplified Data')
+displayData(amp_data, 141, 141, 13, 18, ["oxyHb", "deoxyHb"], 'Amplified Data')
+displayData(amp_data, 141, 141, 19, 22, ["oxyHb", "deoxyHb"], 'Amplified Data')
 
 % save filtered data
 SaveCurrentData(amp_data, "measurements\filtered\");

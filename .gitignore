@@ -2,3 +2,5 @@ measurements/cleaned/*/*
 measurements/filtered/*/*
 .idea/*
 *.asv
+*.SAV
+*.sav

@@ -23,7 +23,8 @@ def select_rd_file(files, percentage) -> list:
     # print(f"SELECTED FILES TYPE: {type(selected_files)}")
     return selected_files
 
-def sep_train_data() -> list:
+
+def sep_train_data() -> tuple[list, list]:
     """
 
     Separate the cleaned dataset into train and test datasets (7:3 ratio)
@@ -208,6 +209,38 @@ def pretreat_data():
             scaler = normalise(df)
             # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
             train_data.append(df)
+
+    test_data = []
+    # Read test data
+    for file in test_list_data:
+        for i in range(len(file)):
+            # Open CSV file from train data
+            df = pd.read_csv(pathlib.Path(file[i]))
+
+            # print(f"FILE READ : {pathlib.Path(file[i])}")
+
+            # Drop irrelevant data
+            df = df.drop(df.columns[0], axis=1)
+            df = df.drop(df.columns[1:4], axis=1)
+            # print(f"HEAD : {df.head(5)}")
+
+            # Normalise
+            scaler = normalise(df)
+            # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
+            test_data.append(df)
+
+    print(f"{'=' * 50}\nGENERATING MODEL\n{'=' * 50}")
+    trained_model = ai_3d.train_ai(train_data, train_labels)
+
+    ai_3d.test_ai(trained_model, test_data, test_labels)
+
+    answer = input("Save the model ? (y for yes, n for no)\n>")
+    if answer == "y":
+        print("\nSaving model...")
+        if not ai_3d.save_model(trained_model):
+            print("Model saved !")
+        else:
+            print("Error while saving model")
 
 
 

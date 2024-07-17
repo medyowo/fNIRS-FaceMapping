@@ -61,10 +61,6 @@ def train_ai(train_data, train_label, test_data, test_label, type_classifier):
         model = "RBF SVM"
         classifier = SVC()
 
-    elif type_classifier in ("GAUSSIAN PROCESS", "5"):
-        model = "Gaussian Process"
-        classifier = GaussianProcessClassifier()
-
     else:
         print("There was an issue. Please try again.")
 

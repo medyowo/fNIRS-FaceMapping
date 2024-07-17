@@ -233,7 +233,7 @@ def pretreat_data():
     all_train_data, all_train_label = ai_2d.pre_treatment(train_data, train_label, "train")
     all_test_data, all_test_label = ai_2d.pre_treatment(test_data, test_label, "test")
 
-    type_classifier = input("Select a classifier :\n1) DecisionTreeClassifier\n2) KNeighborsClassifier\n3) RandomForest\n4) RBF SVM\n5) Gaussian Process\n\n")
+    type_classifier = input("Select a classifier :\n1) DecisionTreeClassifier\n2) KNeighborsClassifier\n3) RandomForest\n4) RBF SVM\n\n")
     ai_2d.train_ai(all_train_data, all_train_label, all_test_data, all_test_label, type_classifier)
 
 

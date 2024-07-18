@@ -45,7 +45,24 @@ For each experiment we made 5 tries for 1 minute each.
 - pandas (2.2.2)
 - pathlib (1.0.1)
 - scikit-learn (1.5.1)
+- keras (3.4.1)
+- matplotlib (3.9.1)
 
 > To install all requirements at once just use :
 ```pip install -r requirements.txt```
 
+## Code Usage
+
+#### 4 main files are useful for general usage of code :
+
+1. ```preprocessing/preprocessing.py``` : this file transform ```.TXT``` files gotten from fNIRS software and transform them into ```.csv``` file for a easier usage.
+2. ```analysis/analyzeData.m``` : this file use MATLAB program to filter collected data and amplify training data. 
+3. ```ai_train.py``` : this file is used to train ai alogrithm with dedicated database. We trained 4 Classifier algorithms and a Machine Learning Neural Network.
+4. ```ai_use.py``` : if you are not planning to use your own database, just use this one. The program is used to predict data using trained models in the ```models/``` folder.
+
+#### If you want to use the program, do as following :
+1. Import your collected data in ```MEASUREMENTS/to_clean```
+2. Launch ```preprocessing.py``` and type "r" (real data)
+3. Launch ```analyzeData.m``` and type "real" (real data)
+4. Launch ```ai_use.py``` and enter any generated model from ```models/``` folder
+5. Read your results

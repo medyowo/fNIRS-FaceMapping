@@ -2,12 +2,9 @@ import pandas as pd
 from sklearn import tree
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.svm import SVC
-from sklearn.model_selection import cross_val_score
 from sklearn.metrics import ConfusionMatrixDisplay,confusion_matrix
 import matplotlib.pyplot as plt
-import numpy as np
 
 def pre_treatment(train_data, train_label, type_data):
     """
@@ -46,19 +43,19 @@ def train_ai(train_data, train_label, test_data, test_label, type_classifier):
     type_classifier = type_classifier.upper()
 
     if type_classifier in ("DECISIONTREECLASSIFIER", "1"):
-        model = "Decision Tree Classifier"
+        model = "Decision_Tree_Classifier"
         classifier = tree.DecisionTreeClassifier()
 
     elif type_classifier in ("KNEIGHBORSCLASSIFIER", "2"):
-        model = "K Neighbors Classifier"
+        model = "KNeighbors_Classifier"
         classifier = KNeighborsClassifier()
 
     elif type_classifier in ("RANDOMFOREST", "3"):
-        model = "Random Forest"
+        model = "Random_Forest"
         classifier = RandomForestClassifier()
 
     elif type_classifier in ("RBF SVM", "4"):
-        model = "RBF SVM"
+        model = "RBF_SVM"
         classifier = SVC()
 
     else:
@@ -92,3 +89,5 @@ def train_ai(train_data, train_label, test_data, test_label, type_classifier):
     mat_conf.plot(cmap= style, values_format = ".0%")
     mat_conf.ax_.set_title("Confusion Matrix (Normalised)")
     plt.show()
+
+    return classifier, model

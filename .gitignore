@@ -1,6 +1,7 @@
-measurements/cleaned/*/*
-measurements/filtered/*/*
+train_measurements/cleaned/*/*
+train_measurements/filtered/*/*
 .idea/*
 *.asv
 *.SAV
 *.sav
+__pycache__/

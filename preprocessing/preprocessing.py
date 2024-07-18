@@ -2,10 +2,61 @@ import pandas as pd
 import pathlib
 
 
-def txt2csv() -> None:
+def transform_measurements():
+    """
+    
+    Chooses the dataset to transform to CSV table
+    CSVテーブルに変換するデータセットを選択
+    
+    """
+    print(f"{'=' * 50}\nCONVERT MEASUREMENTS TO CSV\nt : training dataset, r : real dataset\n{'=' * 50}")
+    answer = input("Choose used dataset\n>")
+
+    if answer == "t":
+        txt2csv_train()
+    elif answer == "r":
+        txt2csv_real()
+    else:
+        print("Unrecognized answer")
+
+def txt2csv_real() -> None:
     """
 
-    Reads fNIRS text data and converts it to a CSV table
+    Reads fNIRS text data and converts it to a CSV table (train)
+    fNIRSのテキストデータを読み取り、CSVテーブルに変換します
+
+    """
+    cleaned_folder = pathlib.Path("MEASUREMENTS/cleaned/")
+    to_clean_folder = pathlib.Path("MEASUREMENTS/to_clean/")
+
+    # Create cleaned directory is it doesn't exist
+    # クリーンなディレクトリが存在しない場合は作成します
+    if not cleaned_folder.is_dir():
+        cleaned_folder.mkdir()
+
+    for file in to_clean_folder.glob('*.TXT'):
+        fname = str(file)
+        print("[CLEANING FILE :" + fname.rsplit('\\', maxsplit=1)[-1] + "]")
+
+        try:
+            df = pd.read_csv(
+                fname,
+                sep="\t",
+                skiprows=33)
+            print("successfully opened file")
+
+            # Convert data to CSV file
+            # データをCSVファイルに変換
+            df.to_csv(fname.replace(str(to_clean_folder), str(cleaned_folder)).replace("TXT","csv"))
+            print(f"Converted {fname} successfully.\n")
+
+        except FileNotFoundError:
+            print(f"File {fname} not found\n")
+
+def txt2csv_train() -> None:
+    """
+
+    Reads fNIRS text data and converts it to a CSV table (train)
     fNIRSのテキストデータを読み取り、CSVテーブルに変換します
 
     """
@@ -18,14 +69,14 @@ def txt2csv() -> None:
 
     for name in fname_options['names']:
 
-        cleaned_folder = pathlib.Path(f"measurements/cleaned/{name.upper()}/")
-        to_clean_folder = pathlib.Path(f"measurements/to_clean/{name.upper()}/")
+        cleaned_folder = pathlib.Path(f"train_measurements/cleaned/{name.upper()}/")
+        to_clean_folder = pathlib.Path(f"train_measurements/to_clean/{name.upper()}/")
 
         # Create cleaned directory is it doesn't exist
         # クリーンなディレクトリが存在しない場合は作成します
         if not cleaned_folder.is_dir():
-            if not pathlib.Path(f"measurements/cleaned").is_dir():
-                pathlib.Path(f"measurements/cleaned").mkdir()
+            if not pathlib.Path(f"train_measurements/cleaned").is_dir():
+                pathlib.Path(f"train_measurements/cleaned").mkdir()
             cleaned_folder.mkdir()
 
         # Check each subfolder of the data directory to get data
@@ -71,4 +122,4 @@ def txt2csv() -> None:
 
 
 if __name__ == '__main__':
-    txt2csv()
+    transform_measurements()

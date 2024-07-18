@@ -1,12 +1,8 @@
-import pandas as pd
-import numpy as np
 import pathlib
 import random
+import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
-from sklearn.model_selection import cross_val_score
-from sklearn import tree
-from ai_processing import ai_2d
-from ai_processing import ai_3d
+
 
 # The prints in the comments allow debugging in case of problems
 # コメント内のプリントは問題が発生した場合のデバッグに役立ちます
@@ -39,7 +35,7 @@ def sep_train_data() -> tuple[list, list]:
         'exp_type': ['temoin', 'experience']
     }
 
-    base_path = pathlib.Path('measurements/filtered')
+    base_path = pathlib.Path('train_measurements/filtered')
     # base_path = pathlib.Path('measurements/cleaned')
 
     train_data = []
@@ -148,54 +144,36 @@ def label_list(dataset) -> list:
         
     return label_lst
 
-# def learn_data(train_data, train_label):
-#     """
-#
-#     Use of the Stochastic Gradient Descent (SGD) Classifier to learn the train dataset
-#
-#     """
-#     classifier = tree.DecisionTreeClassifier()
-#     print("PREDICTING...")
-#     classifier.fit(train_data, train_label)
-#     # print(f"PREDICT : {classifier.predict(train_data)[0]}")
-#     # print(f"Scores de décision : {classifier.decision_function(train_data)[0]}\n")
-#     # print(f"Position du plus haut score : {np.argmax(classifier.decision_function(train_data)[0])}")
 
 def labels_to_num(labels):
     label_encoder = LabelEncoder()
     return label_encoder.fit_transform(labels)
 
-def pretreat_data():
+
+def pretreat_train_data():
     tmp_train_data, tmp_test_data = sep_train_data()
-
-    count = 0
-    for tmp_train_list in tmp_train_data:
-        count += len(tmp_train_list)
-
-    print("TOTAL COUNT TMP TRAIN : ", count)
-
     train_set, test_set = label_data(tmp_train_data, tmp_test_data)
 
     # Create separate corresponding labels
     train_label = label_list(train_set)
     test_label = label_list(test_set)
-    print(f"TRAIN LABEL : {train_label}")
+    # print(f"TRAIN LABEL : {train_label}")
 
     # Encode labels to numeric values
     train_labels = labels_to_num(train_label)
     test_labels = labels_to_num(test_label)
-    print(f"TRAIN LABEL : {train_labels}")
+    # print(f"TRAIN LABEL : {train_labels}")
 
     # Create separate corresponding data
     train_list_data = list(train_set.values())
     test_list_data = list(test_set.values())
-    print(f"TRAIN DATA : {train_list_data}")
+    # print(f"TRAIN DATA : {train_list_data}")
 
     train_data = []
     test_data = []
     # Read train data
     for file in train_list_data:
-        for i in range(len(file)):
+        for i, val in enumerate(file):
             # Open CSV file from train data
             df = pd.read_csv(pathlib.Path(file[i]))
 
@@ -213,7 +191,7 @@ def pretreat_data():
     
     # Read test data
     for file in test_list_data:
-        for i in range(len(file)):
+        for i, val in enumerate(file):
             # Open CSV file from train data
             df = pd.read_csv(pathlib.Path(file[i]))
 
@@ -228,49 +206,15 @@ def pretreat_data():
             scaler = normalise(df)
             # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
             test_data.append(df)
+    print(f"NUMBER OF TRAIN SAMPLES : {len(train_data)}")
+    print(f"NUMBER OF TEST SAMPLES : {len(test_data)}\n")
+    
+    return train_data, train_labels, test_data, test_labels
 
-    test_data = []
-    # Read test data
-    for file in test_list_data:
-        for i in range(len(file)):
-            # Open CSV file from train data
-            df = pd.read_csv(pathlib.Path(file[i]))
-
-            # print(f"FILE READ : {pathlib.Path(file[i])}")
-
-            # Drop irrelevant data
-            df = df.drop(df.columns[0], axis=1)
-            df = df.drop(df.columns[1:4], axis=1)
-            # print(f"HEAD : {df.head(5)}")
-
-            # Normalise
-            scaler = normalise(df)
-            # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
-            test_data.append(df)
-
-    print(f"{'=' * 50}\nGENERATING MODEL\n{'=' * 50}")
-    trained_model = ai_3d.train_ai(train_data, train_labels)
-
-    ai_3d.test_ai(trained_model, test_data, test_labels)
-
-    answer = input("Save the model ? (y for yes, n for no)\n>")
-    if answer == "y":
-        print("\nSaving model...")
-        if not ai_3d.save_model(trained_model):
-            print("Model saved !")
-        else:
-            print("Error while saving model")
-
-
-
-    all_train_data, all_train_label = ai_2d.pre_treatment(train_data, train_label, "train")
-    all_test_data, all_test_label = ai_2d.pre_treatment(test_data, test_label, "test")
-
-    type_classifier = input("Select a classifier :\n1) DecisionTreeClassifier\n2) KNeighborsClassifier\n3) RandomForest\n4) RBF SVM\n\n")
-    ai_2d.train_ai(all_train_data, all_train_label, all_test_data, all_test_label, type_classifier)
-
+def pretreat_used_data():
+    print("NONE")
 
 if __name__ == '__main__':
-    pretreat_data()
+    pretreat_train_data()
 
 

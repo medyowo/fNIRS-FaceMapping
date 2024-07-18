@@ -27,7 +27,7 @@ displayData(filtered_data, 1, 1, 19, 22, ["oxyHb", "deoxyHb"], 'Filtered Data')
 % Amplify only training data
 if dataset_type == "train"
     % Amplify data
-    amp_data = amplifyData(filtered_data, ["warping", "jittering", "scaling"], 2);
+    amp_data = amplifyData(filtered_data, ["warping", "scaling"], 2);
 
     % after amplifying
     displayData(amp_data, 141, 141, 13, 18, ["oxyHb", "deoxyHb"], 'Amplified Data')

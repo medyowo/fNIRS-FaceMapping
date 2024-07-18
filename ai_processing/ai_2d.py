@@ -6,30 +6,41 @@ from sklearn.svm import SVC
 from sklearn.metrics import ConfusionMatrixDisplay,confusion_matrix
 import matplotlib.pyplot as plt
 
-def pre_treatment(train_data, train_label, type_data):
-    """
 
-    Pretreat data before AI learning
+def compile_data(train_data):
+    """
+    
+    Add all data back to back
 
     """
     all_data = pd.DataFrame()
-    all_label = []
-    tmp = []
-
-    # Add all data back to back
     for sample in train_data:
         # Drop time channel
         sample = sample.drop(sample.columns[0], axis=1)
 
         # print(f"SAMPLE : {sample.head(5)}")
         all_data = pd.concat([all_data,sample])
+    return all_data
+
+
+def pre_treatment(train_data, train_label, type_data):
+    """
+
+    Pretreat data before AI learning
+
+    """
+    all_label = []
+    tmp = []
+
+    # Add all data back to back
+    all_data = compile_data(train_data)
 
     for label in train_label:
         tmp = [label] * 666
         # print(f"LABEL : {tmp}")
         # all_label.append(tmp)
         all_label.extend(tmp)
-    
+
     print(f"ALL {type_data.upper()} DATA : {len(all_data)}")
     print(f"ALL {type_data.upper()} LABEL : {len(all_label)}\n")
     return all_data, all_label
@@ -83,7 +94,7 @@ def train_ai(train_data, train_label, test_data, test_label, type_classifier):
     style = 'PuRd'
 
     conf_matrix = confusion_matrix(test_label, classifier.predict(test_data), labels=classifier.classes_,normalize='true')
-    mat_conf = ConfusionMatrixDisplay(conf_matrix, display_labels=classifier.classes_)
+    mat_conf = ConfusionMatrixDisplay(conf_matrix, display_labels=sorted(['no_movement', 'jaw', 'face', 'eyebrows', 'nose', 'mouth', 'tongue']))
     mat_conf.plot(cmap = style)
     mat_conf.ax_.set_title("Confusion Matrix")
     mat_conf.plot(cmap= style, values_format = ".0%")

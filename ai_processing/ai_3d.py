@@ -1,9 +1,7 @@
-from keras import Input
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
 from keras.utils import to_categorical
 from keras.optimizers import Adam
-import pickle as pk
 from sklearn.metrics import accuracy_score, classification_report
 import numpy as np
 
@@ -48,13 +46,3 @@ def test_ai(model, test_data, y_test):
 
     print("Accuracy:", accuracy * 100, " %")
     print("Classification Report:\n", report)
-
-
-def save_model(model):
-    try:
-        filename = 'ML_NN.sav'
-        pk.dump(model, open("models/"+filename, 'wb'))
-    except [FileExistsError, FileNotFoundError]:
-        return 1
-
-    return 0

@@ -44,7 +44,7 @@ function extractedData = extractExpDataFromFile(fileName)
     extractedData{:, "index"} = extractedData{:, "index"} - 1;
     
     % Normalize data duration (every data > 60s are deleted)
-    toDelete = extractedData.time > 60;
+    toDelete = extractedData.time > 50;
     extractedData(toDelete,:) = [];
     
     % Extract info from file link   

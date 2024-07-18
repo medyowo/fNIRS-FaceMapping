@@ -76,10 +76,6 @@ def sep_train_data() -> tuple[list, list]:
                     # print(f"REMAINING FILES : {remaining_files}")
                     test_data.append(remaining_files)
 
-    counter = 0
-    for train_file in train_data:
-      counter += len(train_file)
-
     return train_data, test_data
 
 
@@ -98,7 +94,7 @@ def label_data(train_data, test_data) -> dict:
     train_set = {}
     test_set = {}
 
-    for i in range(len(label_options)):
+    for i, val in enumerate(label_options):
         try:
             train_set[label_options[i]] += train_data[i]
             test_set[label_options[i]] += test_data[i]
@@ -149,6 +145,26 @@ def labels_to_num(labels):
     label_encoder = LabelEncoder()
     return label_encoder.fit_transform(labels)
 
+def modify_data(data_list):
+    normalized_data = []
+    for file in data_list:
+        for i, val in enumerate(file):
+            # Open CSV file from train data
+            df = pd.read_csv(pathlib.Path(val))
+
+            # print(f"FILE READ : {pathlib.Path(file[i])}")
+
+            # Drop irrelevant data
+            df = df.drop(df.columns[0], axis=1)
+            df = df.drop(df.columns[1:4], axis=1)
+            # print(f"HEAD : {df.head(5)}")
+
+            # Normalise
+            scaler = normalise(df)
+            # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
+            normalized_data.append(df)
+    return normalized_data
+
 
 def pretreat_train_data():
     tmp_train_data, tmp_test_data = sep_train_data()
@@ -162,57 +178,28 @@ def pretreat_train_data():
     # Encode labels to numeric values
     train_labels = labels_to_num(train_label)
     test_labels = labels_to_num(test_label)
-    # print(f"TRAIN LABEL : {train_labels}")
+    print(f"TRAIN LABEL : {train_labels}")
 
     # Create separate corresponding data
     train_list_data = list(train_set.values())
     test_list_data = list(test_set.values())
     # print(f"TRAIN DATA : {train_list_data}")
 
-    train_data = []
-    test_data = []
-    # Read train data
-    for file in train_list_data:
-        for i, val in enumerate(file):
-            # Open CSV file from train data
-            df = pd.read_csv(pathlib.Path(file[i]))
+    train_data = modify_data(train_list_data)
+    test_data = modify_data(test_list_data)
 
-            # print(f"FILE READ : {pathlib.Path(file[i])}")
-
-            # Drop irrelevant data
-            df = df.drop(df.columns[0], axis=1)
-            df = df.drop(df.columns[1:4], axis=1)
-            # print(f"HEAD : {df.head(5)}")
-
-            # Normalise
-            scaler = normalise(df)
-            # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
-            train_data.append(df)
-    
-    # Read test data
-    for file in test_list_data:
-        for i, val in enumerate(file):
-            # Open CSV file from train data
-            df = pd.read_csv(pathlib.Path(file[i]))
-
-            # print(f"FILE READ : {pathlib.Path(file[i])}")
-
-            # Drop irrelevant data
-            df = df.drop(df.columns[0], axis=1)
-            df = df.drop(df.columns[1:4], axis=1)
-            # print(f"HEAD : {df.head(5)}")
-
-            # Normalise
-            scaler = normalise(df)
-            # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
-            test_data.append(df)
     print(f"NUMBER OF TRAIN SAMPLES : {len(train_data)}")
     print(f"NUMBER OF TEST SAMPLES : {len(test_data)}\n")
     
     return train_data, train_labels, test_data, test_labels
 
-def pretreat_used_data():
-    print("NONE")
+
+def pretreat_real_data():
+    data_list = list(pathlib.Path('MEASUREMENTS/filtered').glob('*'))
+    normalized_data = modify_data([data_list])
+
+    print(f"NUMBER OF SAMPLES : {len(normalized_data)}\n")
+    return normalized_data, len(normalized_data), data_list
 
 if __name__ == '__main__':
     pretreat_train_data()

@@ -192,6 +192,7 @@ def pretreat_data():
     print(f"TRAIN DATA : {train_list_data}")
 
     train_data = []
+    test_data = []
     # Read train data
     for file in train_list_data:
         for i in range(len(file)):
@@ -209,6 +210,24 @@ def pretreat_data():
             scaler = normalise(df)
             # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
             train_data.append(df)
+    
+    # Read test data
+    for file in test_list_data:
+        for i in range(len(file)):
+            # Open CSV file from train data
+            df = pd.read_csv(pathlib.Path(file[i]))
+
+            # print(f"FILE READ : {pathlib.Path(file[i])}")
+
+            # Drop irrelevant data
+            df = df.drop(df.columns[0], axis=1)
+            df = df.drop(df.columns[1:4], axis=1)
+            # print(f"HEAD : {df.head(5)}")
+
+            # Normalise
+            scaler = normalise(df)
+            # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
+            test_data.append(df)
 
     test_data = []
     # Read test data
@@ -243,6 +262,12 @@ def pretreat_data():
             print("Error while saving model")
 
 
+
+    all_train_data, all_train_label = ai_2d.pre_treatment(train_data, train_label, "train")
+    all_test_data, all_test_label = ai_2d.pre_treatment(test_data, test_label, "test")
+
+    type_classifier = input("Select a classifier :\n1) DecisionTreeClassifier\n2) KNeighborsClassifier\n3) RandomForest\n4) RBF SVM\n\n")
+    ai_2d.train_ai(all_train_data, all_train_label, all_test_data, all_test_label, type_classifier)
 
 
 if __name__ == '__main__':

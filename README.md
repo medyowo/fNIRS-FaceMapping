@@ -2,6 +2,7 @@
 ![Used languages](https://skillicons.dev/icons?i=python,matlab)
 
 ## Description of the project
+> ### プロジェクトの説明
 ---
 
 The fNIRS FaceMapping project uses data collected from the Shimadzu LIGHTNIRS Portable functional Near-Infrared Spectroscopy System for research.
@@ -15,23 +16,23 @@ Shimadzuソフトウェアは、データをプレーンテキストファイル
 ---
 
 ## About Data
-### データについて
+> ### データについて
 
-Notice that data are in folded like this : \
-データがこのように折りたたまれていることに注意してください：
-```measurements\to_clean\{CONTROL SUBJECT NAME}\[_temoin{number}|experience{number}]\DATA:```
+Notice that data are in folded like this : ```measurements\to_clean\{CONTROL SUBJECT NAME}\[_temoin{number}|experience{number}]\DATA```
+> データがこのように折りたたまれていることに注意してください：
+```measurements\to_clean\{CONTROL SUBJECT NAME}\[_temoin{number}|experience{number}]\DATA```
 
-We collected data from Shimadzu LIGHTNIRS and named them as following : \
-Shimadzu LIGHTNIRS からデータを収集し、以下のように名前を付けました：
+We collected data from Shimadzu LIGHTNIRS and named them as following :
+> Shimadzu LIGHTNIRS からデータを収集し、以下のように名前を付けました：
 ### Control Experiments
-#### 対照実験
+> #### 対照実験
 1. ```[NO MOVEMENTS]``` **\_temoin1 :** Resting, Closed Eyes, Head still, No chewing gum 
 2. ```[JAW]``` **\_temoin2 :** Resting, Closed Eyes, Head still, Chewing gum 
 3. ```[NO MOVEMENTS]``` **\_temoin3 :** Resting, Opened Eyes, Head still, No chewing gum 
 4. ```[JAW]``` **\_temoin4 :** Resting, Opened Eyes, Head still, Chewing gum 
 
 ### Test Experiments
-#### テスト実験
+> #### テスト実験
 5. ```[ALL]``` **experience5**: Moving all face muscles
 6. ```[EYEBROWS]``` **experience6 :** Raised Eyebrows 
 7. ```[EYEBROWS]``` **experience7 :** Frowned Eyebrows 
@@ -43,11 +44,11 @@ Shimadzu LIGHTNIRS からデータを収集し、以下のように名前を付�
 13. ```[MOUTH]``` **experience13 :** Puckered Mouth 
 14. ```[TONGUE]``` **experience14 :** Moving Tongue
 
-For each experiment we made 5 tries for 1 minute each. \
-各実験で、1分ごとに5回の試行を行いました。
+For each experiment we made 5 tries for 1 minute each.
+> 各実験で、1分ごとに5回の試行を行いました。
 
 ## Python Requirements
-### Python の要件
+> ### Python の要件
 
 - pandas (2.2.2)
 - pathlib (1.0.1)
@@ -60,10 +61,10 @@ For each experiment we made 5 tries for 1 minute each. \
 ```pip install -r requirements.txt```
 
 ## Code Usage
-### コードの使用法
+> ### コードの使用法
 
 #### 4 main files are useful for general usage of code :
-##### コードの一般的な使用に役立つ主要なファイルは4つです：
+> ##### コードの一般的な使用に役立つ主要なファイルは4つです：
 
 1. ```preprocessing/preprocessing.py``` : this file transform ```.TXT``` files gotten from fNIRS software and transform them into ```.csv``` file for a easier usage.
 > このファイルは、fNIRSソフトウェアから取得した ```.TXT``` ファイルを変換し、使いやすい ```.csv``` ファイルに変換します。
@@ -81,9 +82,9 @@ For each experiment we made 5 tries for 1 minute each. \
 4. Launch ```ai_use.py``` and enter any generated model from ```models/``` folder
 5. Read your results
 
-##### プログラムを使用したい場合は、次のようにしてください：
-1. 収集したデータを ```MEASUREMENTS/to_clean``` にインポートします
-2. ```preprocessing.py``` を実行し、「r」（実データ）と入力します
-3. ```analyzeData.m``` を実行し、「real」（実データ）と入力します
-4. ```ai_use.py``` を実行し、models/ フォルダーから生成された任意のモデルを入力します
-5. 結果を確認します
+> ##### プログラムを使用したい場合は、次のようにしてください：
+> 1. 収集したデータを ```MEASUREMENTS/to_clean``` にインポートします
+> 2. ```preprocessing.py``` を実行し、「r」（実データ）と入力します
+> 3. ```analyzeData.m``` を実行し、「real」（実データ）と入力します
+> 4. ```ai_use.py``` を実行し、models/ フォルダーから生成された任意のモデルを入力します
+> 5. 結果を確認します

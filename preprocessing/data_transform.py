@@ -36,7 +36,6 @@ def sep_train_data() -> tuple[list, list]:
     }
 
     base_path = pathlib.Path('train_measurements/filtered')
-    # base_path = pathlib.Path('measurements/cleaned')
 
     train_data = []
     test_data = []
@@ -50,7 +49,7 @@ def sep_train_data() -> tuple[list, list]:
 
             folder_name = f"{prefix}{i}"
 
-            #print(f"FOLDER NAME : {folder_name}")
+            # print(f"FOLDER NAME : {folder_name}")
             subfolder = base_path / name.upper() / folder_name
             # print(f"SUBFOLDER : {subfolder}")
 
@@ -83,14 +82,17 @@ def label_data(train_data, test_data) -> dict:
     """
     
     Label each file
+    各ファイルにラベルを付ける
     
     """
     # Create label options list
+    # ラベルオプションリストを作成する
     label_temp = [('no_movement', 2), ('jaw', 2),('face', 1), ('eyebrows', 2), ('nose', 2), ('mouth', 4), ('tongue', 1)]
     label_options = [element for element, count in label_temp for _ in range(count)]
     # print(f"LABEL OPTIONS : {label_options}")
 
     # Label each file
+    # 各ファイルにラベルを付ける
     train_set = {}
     test_set = {}
 
@@ -119,87 +121,116 @@ def normalise(file) -> list:
     """
 
     # Normalisation (Scaling Normalisation): modifies dataset to fit on a scale between [0;1]
+    # 正規化（スケーリング正規化）：データセットを[0;1]の範囲に収まるように変更する
     scaler = MinMaxScaler()
     scaler = scaler.fit_transform(file)
-    # print(f"DATA NORMALISED : {scaler}")
     return scaler
 
 def label_list(dataset) -> list:
     """
 
     Separates the labels of the dataset into a different list
+    データセットのラベルを別のリストに分ける
     
     """
     label_lst = []
     
     # Iterate over the items in the dataset
+    # データセット内のアイテムを繰り返し処理する
     for label, data_list in dataset.items():
 
         # Append the label for each item in the data list
+        # データリストの各アイテムにラベルを追加する
         label_lst.extend([label] * len(data_list))
         
     return label_lst
 
 
 def labels_to_num(labels):
+    """
+    
+    Get label and encode them into numerical values
+    ラベルを取得して数値にエンコードする
+    
+    """
     label_encoder = LabelEncoder()
     return label_encoder.fit_transform(labels)
 
 def modify_data(data_list):
+    """
+
+    Modify data to remove unused columns and normalize values
+    データを修正して未使用の列を削除し、値を正規化する
+
+    """
     normalized_data = []
     for file in data_list:
         for i, val in enumerate(file):
-            # Open CSV file from train data
+            # Open CSV file 
+            # CSVファイルを開く
             df = pd.read_csv(pathlib.Path(val))
 
-            # print(f"FILE READ : {pathlib.Path(file[i])}")
-
             # Drop irrelevant data
+            # 無関係なデータを削除する
             df = df.drop(df.columns[0], axis=1)
             df = df.drop(df.columns[1:4], axis=1)
-            # print(f"HEAD : {df.head(5)}")
 
-            # Normalise
+            # Normalize values
+            # 値を正規化する
             scaler = normalise(df)
-            # print(f"HEAD AFTER NORMALISATION : {df.head(5)}")
             normalized_data.append(df)
+    
     return normalized_data
 
 
 def pretreat_train_data():
+    """
+    
+    Pre-treatment function on training database
+    トレーニングデータベースに対する前処理機能
+    
+    """
     tmp_train_data, tmp_test_data = sep_train_data()
     train_set, test_set = label_data(tmp_train_data, tmp_test_data)
 
     # Create separate corresponding labels
+    # 対応するラベルを別々に作成する
     train_label = label_list(train_set)
     test_label = label_list(test_set)
-    # print(f"TRAIN LABEL : {train_label}")
 
     # Encode labels to numeric values
+    # ラベルを数値にエンコードする
     train_labels = labels_to_num(train_label)
     test_labels = labels_to_num(test_label)
     print(f"TRAIN LABEL : {train_labels}")
 
     # Create separate corresponding data
+    # 対応するデータを別々に作成する
     train_list_data = list(train_set.values())
     test_list_data = list(test_set.values())
-    # print(f"TRAIN DATA : {train_list_data}")
 
     train_data = modify_data(train_list_data)
     test_data = modify_data(test_list_data)
 
     print(f"NUMBER OF TRAIN SAMPLES : {len(train_data)}")
     print(f"NUMBER OF TEST SAMPLES : {len(test_data)}\n")
-    
+  
     return train_data, train_labels, test_data, test_labels
 
 
 def pretreat_real_data():
+    """
+    
+    Pre-treatment function on real data
+    実データに対する前処理機能
+    
+    """
     data_list = list(pathlib.Path('MEASUREMENTS/filtered').glob('*'))
     normalized_data = modify_data([data_list])
 
     print(f"NUMBER OF SAMPLES : {len(normalized_data)}\n")
     return normalized_data, len(normalized_data), data_list
+
 
 if __name__ == '__main__':
     pretreat_train_data()

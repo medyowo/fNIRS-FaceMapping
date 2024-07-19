@@ -1,6 +1,10 @@
 % getExpData is use to get experimental data from specified folder
 % The structure of get data is as following :
-% cell [140] expArrays -> table ['index', 'time', 'task', 'mark', 'count', 'channels[1-22]_[∅-2]'] 
+% cell [140] expArrays -> table ['index', 'time', 'task', 'mark', 'count', 'channels[1-22]_[∅-2]']
+% getExpData は、指定されたフォルダーから実験データを取得するために使用されます
+% データの構造は以下の通りです：
+% セル [140] expArrays -> テーブル ['index', 'time', 'task', 'mark', 'count', 'channels[1-22]_[∅-2]']
+
 function expArrays = getExpData(myFolder)
     % Change path to repo folder path
     addpath("../fNIRS-FaceMapping/")

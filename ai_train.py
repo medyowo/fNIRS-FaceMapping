@@ -9,6 +9,7 @@ def train():
     """
     
     train choosen model for facial muscle detection
+    顔面筋検出のために選択されたモデルを訓練する
 
     """
     print(f"{'=' * 50}\nLOADING DATABASE\n{'=' * 50}")
@@ -36,6 +37,7 @@ def alg_train(train_data, train_labels, test_data, test_labels):
     """
     
     train classifier algorithm with 2D data (no time dimension)
+    時間次元なしの2Dデータで分類アルゴリズムを訓練する
 
     """
     all_train_data, all_train_label = ai_2d.pre_treatment(train_data, train_labels, "train")
@@ -51,6 +53,7 @@ def nn_train(train_data, train_labels, test_data, test_labels):
     """
     
     train neural network with 3D data (time dimension)
+    時間次元を含む3Dデータでニューラルネットワークを訓練する
 
     """
     trained_model = ai_3d.train_ai(train_data, train_labels)
@@ -63,6 +66,7 @@ def select_save(trained_model, name):
     """
 
     Select if user want to save model or not
+    ユーザーがモデルを保存するかどうかを選択
     
     """
     answer = input("Save the model ? (y for yes, n for no)\n>")
@@ -78,6 +82,7 @@ def save_model(model, name):
     """
     
     Save computed model to .sav file
+    計算されたモデルを.savファイルに保存する
     
     """
     try:

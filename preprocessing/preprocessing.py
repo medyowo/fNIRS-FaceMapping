@@ -22,8 +22,8 @@ def transform_measurements():
 def txt2csv_real() -> None:
     """
 
-    Reads fNIRS text data and converts it to a CSV table (train)
-    fNIRSのテキストデータを読み取り、CSVテーブルに変換します
+    Reads fNIRS text data and converts it to a CSV table (real data)
+    fNIRSのテキストデータを読み取り、CSVテーブルに変換します (実データ)
 
     """
     cleaned_folder = pathlib.Path("MEASUREMENTS/cleaned/")
@@ -57,7 +57,7 @@ def txt2csv_train() -> None:
     """
 
     Reads fNIRS text data and converts it to a CSV table (train)
-    fNIRSのテキストデータを読み取り、CSVテーブルに変換します
+    fNIRSのテキストデータを読み取り、CSVテーブルに変換します (訓練)
 
     """
     # temoin = 対照

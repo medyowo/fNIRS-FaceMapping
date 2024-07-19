@@ -11,34 +11,35 @@ def compile_data(train_data):
     """
     
     Add all data back to back
+    すべてのデータを連続して追加する
 
     """
     all_data = pd.DataFrame()
     for sample in train_data:
         # Drop time channel
+        # 時間チャネルを削除する
         sample = sample.drop(sample.columns[0], axis=1)
-
-        # print(f"SAMPLE : {sample.head(5)}")
         all_data = pd.concat([all_data,sample])
+    
     return all_data
 
 
 def pre_treatment(train_data, train_label, type_data):
     """
 
-    Pretreat data before AI learning
+    Pre-treat data before AI learning
+    AI学習前にデータを前処理する
 
     """
     all_label = []
     tmp = []
 
     # Add all data back to back
+    # すべてのデータを連続して追加する
     all_data = compile_data(train_data)
 
     for label in train_label:
         tmp = [label] * 666
-        # print(f"LABEL : {tmp}")
-        # all_label.append(tmp)
         all_label.extend(tmp)
 
     print(f"ALL {type_data.upper()} DATA : {len(all_data)}")
@@ -49,6 +50,7 @@ def train_ai(train_data, train_label, test_data, test_label, type_classifier):
     """
 
     Use of different classifiers to predict test data
+    異なる分類器を使用してテストデータを予測する
 
     """
     type_classifier = type_classifier.upper()
@@ -74,16 +76,20 @@ def train_ai(train_data, train_label, test_data, test_label, type_classifier):
 
     print("\nPREDICTING...\n")
     classifier.fit(train_data, train_label)
-    # TESTING PRINTS
-
+    
+    # =========== TESTING PRINTS ===========
+    # ============= テスト印刷 ==============
     # print(f"PREDICT : {classifier.predict(train_data)[0]}")
     # print(f"Decision scores : {classifier.predict_proba(train_data)[0]}\n")
     # print(f"Classes : {classifier.classes_}")
     # print(f"Highest score position : {np.argmax(classifier.predict_proba(train_data)[0])}")
-
+    # =========== TESTING PRINTS ===========
+    
     # EVALUATING MODEL
+    # モデルの評価
     print(f"===== Model : {model} =====")
     # Evaluating on training data without cross-validation
+    # クロスバリデーションなしでトレーニングデータで評価する
     train_accuracy = classifier.score(train_data, train_label)
     print(f"Accuracy on train data: {round(train_accuracy * 100, 2)} %")
     test_accuracy = classifier.score(test_data, test_label)
@@ -91,6 +97,7 @@ def train_ai(train_data, train_label, test_data, test_label, type_classifier):
     print("===========================================")
 
     # CONFUSION MATRIX
+    # 混同行列
     style = 'PuRd'
 
     conf_matrix = confusion_matrix(test_label, classifier.predict(test_data), labels=classifier.classes_,normalize='true')
